@@ -1,18 +1,14 @@
-package com.rest.update.customcode.com.rest.update.customcode;
+package com.rest.update.customcode.com;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.read.write.api.GetPostApiRequest;
 
 @RestController
 public class APIController {
@@ -21,12 +17,15 @@ public class APIController {
 
 	// Load the class GetPostApiRequest
 	AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-			com.read.write.api.GetPostApiRequest.class);
-	GetPostApiRequest getPostApiRequest = context.getBean(GetPostApiRequest.class);
+			com.rest.update.customcode.com.TagMultithread.class);
+	
+	TagMultithread tagMultithread = context.getBean(TagMultithread.class);
+	
+	
 
 	@GetMapping("/post")
 	public ResponseEntity<ErrorMessage> queryTagParam(@RequestParam String tag, @RequestParam String sortBy,
-			@RequestParam String direction) throws UnsupportedOperationException, IOException {
+			@RequestParam String direction) throws UnsupportedOperationException, IOException, InterruptedException, ExecutionException {
 
 		// Checcks for tag parameter
 		if (!Validation.validateTagParameter(tag)) {
@@ -45,7 +44,7 @@ public class APIController {
 					HttpStatus.NOT_FOUND);
 		}
 
-		String response = getPostApiRequest.getAPIResponseforQueryParams(tag, sortBy, direction);
+		String response = tagMultithread.tagMultithread(tag, sortBy, direction);
 		return new ResponseEntity(response, HttpStatus.ACCEPTED);
 	}
 

@@ -1,4 +1,4 @@
-package com.rest.update.customcode.com.rest.update.customcode;
+package com.rest.update.customcode.com;
 
 public class Validation {
 	
